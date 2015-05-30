@@ -1,0 +1,3 @@
+sudo ntpdate ntp.ubuntu.com
+
+to sync the time otherwise you get unaothrized exception.
