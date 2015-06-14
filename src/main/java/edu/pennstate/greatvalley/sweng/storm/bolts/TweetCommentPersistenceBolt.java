@@ -1,11 +1,8 @@
 package edu.pennstate.greatvalley.sweng.storm.bolts;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.Set;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
@@ -17,10 +14,11 @@ import backtype.storm.topology.OutputFieldsDeclarer;
 import backtype.storm.topology.base.BaseRichBolt;
 import backtype.storm.tuple.Fields;
 import backtype.storm.tuple.Tuple;
-import edu.pennstate.greatvalley.sweng.storm.domain.TweetComment;
-import edu.pennstate.greatvalley.sweng.storm.sentiment.AfinnResource;
+import edu.pennstate.greatvalley.sweng.storm.domain.TweetComment
 
 public class TweetCommentPersistenceBolt extends BaseRichBolt {
+	//Creation of logger
+	static Logger logger = Logger.getLogger("myLogger");
 
 	private static final long serialVersionUID = 1L;
 
@@ -54,7 +52,7 @@ public class TweetCommentPersistenceBolt extends BaseRichBolt {
 		TweetComment tweetFeed = (TweetComment) tuple
 				.getValueByField("tweetComment");
 
-		System.out.println("TweetCommentPersistenceBolt->tweetFeed "
+	logger.log(Level.INFO, "TweetCommentPersistenceBolt->tweetFeed "
 				+ tweetFeed);
 		
 		mongoOperation.save(tweetFeed, collectionName);

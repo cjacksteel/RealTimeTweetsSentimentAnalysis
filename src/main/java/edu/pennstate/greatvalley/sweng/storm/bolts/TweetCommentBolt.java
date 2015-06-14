@@ -7,8 +7,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
-import twitter4j.GeoLocation;
 import twitter4j.Status;
 import twitter4j.User;
 import backtype.storm.task.OutputCollector;
@@ -23,15 +24,16 @@ import edu.pennstate.greatvalley.sweng.storm.sentiment.AfinnResource;
 
 public class TweetCommentBolt extends BaseRichBolt {
 
-	/**
-	 * 
-	 */
+	//Creation of logger
+	static Logger logger = Logger.getLogger("myLogger");
+	
 	private static final long serialVersionUID = 1L;
 
 	private OutputCollector outputCollector;
-	private TopologyContext context;
 
 	private Set<String> affinWords;
+
+	private TopologyContext context;
 
 	public void prepare(Map map, TopologyContext context,
 			OutputCollector collector) {
@@ -60,8 +62,7 @@ public class TweetCommentBolt extends BaseRichBolt {
 		String screenName = user.getScreenName();
 		String userName = user.getName();
 		Date tweetTime = status.getCreatedAt();
-		GeoLocation geoLocation = status.getGeoLocation();
-
+		
 		TweetComment tweetFeed = new TweetComment();
 
 		tweetFeed.setTweetID(tweetID);
@@ -74,7 +75,7 @@ public class TweetCommentBolt extends BaseRichBolt {
 
 		tweetFeed.setSentimentWordCountMap(sentimentWordCountMap);
 
-		System.out.println(tweetFeed);
+		logger.log(Level.INFO, tweetFeed.toString());
 
 		outputCollector.emit(new Values(tweetFeed));
 
@@ -128,7 +129,7 @@ public class TweetCommentBolt extends BaseRichBolt {
 		String delim = "[\\s,\",']";
 		String[] split = str.split(delim);
 
-		System.out.println(Arrays.asList(split));
+		logger.log(Level.INFO, Arrays.asList(split));
 
 	}
 }
