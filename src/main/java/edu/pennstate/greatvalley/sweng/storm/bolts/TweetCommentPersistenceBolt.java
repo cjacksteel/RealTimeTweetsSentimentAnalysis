@@ -14,7 +14,7 @@ import backtype.storm.topology.OutputFieldsDeclarer;
 import backtype.storm.topology.base.BaseRichBolt;
 import backtype.storm.tuple.Fields;
 import backtype.storm.tuple.Tuple;
-import edu.pennstate.greatvalley.sweng.storm.domain.TweetComment
+import edu.pennstate.greatvalley.sweng.storm.domain.TweetComment;
 
 public class TweetCommentPersistenceBolt extends BaseRichBolt {
 	//Creation of logger
@@ -22,17 +22,12 @@ public class TweetCommentPersistenceBolt extends BaseRichBolt {
 
 	private static final long serialVersionUID = 1L;
 
-	private OutputCollector outputCollector;
-	private TopologyContext context;
 	private MongoOperations mongoOperation;
 	private final String collectionName = "TweetComment";
 
 	
 	public void prepare(Map map, TopologyContext context,
 			OutputCollector collector) {
-		this.outputCollector = collector;
-		this.context = context;
-
 		ApplicationContext springContext = new ClassPathXmlApplicationContext(
 				"Spring-Config.xml");
 		mongoOperation = (MongoOperations) springContext

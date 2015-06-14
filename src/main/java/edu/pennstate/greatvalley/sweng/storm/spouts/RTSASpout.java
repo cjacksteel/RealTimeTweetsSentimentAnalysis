@@ -26,7 +26,6 @@ import edu.pennstate.greatvalley.sweng.storm.utils.AppConstant;
 
 public class RTSASpout extends BaseRichSpout {
 
-	
 	private static final long serialVersionUID = 1L;
 	
 	private static final Logger logger = LoggerFactory.getLogger(RTSASpout.class);
@@ -34,8 +33,6 @@ public class RTSASpout extends BaseRichSpout {
 	private TwitterStream twitterStream;
 	private LinkedBlockingQueue<Status> queue = new LinkedBlockingQueue<Status>();
 	private SpoutOutputCollector outputCollector;
-	private TopologyContext context;
-	
 	private String[] twitterHandles ;
 	
 	public RTSASpout(String[] twitterHandles) {
@@ -45,19 +42,15 @@ public class RTSASpout extends BaseRichSpout {
 	public  void open(Map conf, TopologyContext context, SpoutOutputCollector collector) {
 		
 		this.outputCollector = collector;
-		this.context = context;
 		this.twitterStream = getTwitterStream();
 				
 		FilterQuery filterQuery = new FilterQuery();
-		//String[] keywords = {"@Modi", "@NarendraModi", "@PMOIndia"};
-		//String[] keywords = {"@PennState", "@PennStateGV", "PennStateGreatValley", "@PSU"};
-		//String[] keywords = {"@Hillary", "@Clinton"};
 	
 		filterQuery.track(twitterHandles);		
 		
 		twitterStream.addListener(this.new TwitterStreamSpoutStatusListener());	
 		twitterStream.filter(filterQuery);		
-		
+	
 	}
 	
 	public void nextTuple() {
@@ -84,10 +77,12 @@ public class RTSASpout extends BaseRichSpout {
 
 	@Override
 	public final void ack(final Object id) {
+		//TODO: add actions
 	}
 
 	@Override
 	public final void fail(final Object id) {
+		//TODO: add actions
 	}
 
 
@@ -112,18 +107,16 @@ public class RTSASpout extends BaseRichSpout {
 	
 		TwitterStreamFactory  twitterStreamFactory =  new TwitterStreamFactory(configBuilder.build());
 		
-		TwitterStream twitterStream = twitterStreamFactory.getInstance();
+		TwitterStream stream = twitterStreamFactory.getInstance();
 		
-		return twitterStream;
+		return stream;
 
 	}
 	
 	private class TwitterStreamSpoutStatusListener implements  StatusListener {
 
-		public void onException(Exception exception) {
-			logger.error(exception.getMessage());
-			exception.printStackTrace();
-			
+		public void onException(Exception e) {
+			logger.error(e.getMessage());			
 		}
 
 		public void onDeletionNotice(StatusDeletionNotice statusDeletionNotice) {
@@ -179,20 +172,13 @@ public class RTSASpout extends BaseRichSpout {
 		String[] keywords = {"@Modi", "@NarendraModi", "@PMOIndia"};
 		RTSASpout twitterStreamSpout =new RTSASpout(keywords);
 		TwitterStream twitterStream =  twitterStreamSpout.getTwitterStream();
-		System.out.println("twitterStream " + twitterStream);
+		logger.info("twitterStream " + twitterStream);
 		
 		FilterQuery filterQuery = new FilterQuery();
-		//String[] keywords = {"@Modi", "@NarendraModi", "@PMOIndia"};
-		//String[] keywords = {"@PennState", "@PennStateGV", "PennStateGreatValley", "@PSU"};
-		//String[] keywords = {"@Hillary", "@Clinton"};
-	
+		
 		filterQuery.track(keywords);		
 		
 		twitterStream.addListener(twitterStreamSpout.new TwitterStreamSpoutStatusListener());	
 		twitterStream.filter(filterQuery);		
-		
 	}
-	
-	
-
 }

@@ -25,6 +25,7 @@ public final class AppConfig {
 			} catch (IOException e) {
 				logger.error("Could not load properties : ");
 				logger.error(e.getMessage());
+				throw new RuntimeException(e);
 			}
 		}
 	
@@ -32,7 +33,7 @@ public final class AppConfig {
 	
 	public static String getPropertyValue(String propertyName) {
 		if (config == null) {
-			new AppConfig();
+			return null;
 		}
 		
 		return config.getProperty(propertyName);

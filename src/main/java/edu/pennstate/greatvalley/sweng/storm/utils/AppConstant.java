@@ -1,6 +1,7 @@
 package edu.pennstate.greatvalley.sweng.storm.utils;
 
 public class AppConstant {
+	private AppConstant() { };
 
 	public static final String OAUTH_ACCESS_TOKEN = "OAUTH_ACCESS_TOKEN";
 	public static final String OAUTH_ACCESS_TOKEN_SECRET = "OAUTH_ACCESS_TOKEN_SECRET";

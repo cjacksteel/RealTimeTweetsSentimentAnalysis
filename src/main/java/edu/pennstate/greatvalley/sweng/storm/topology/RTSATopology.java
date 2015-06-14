@@ -1,7 +1,7 @@
 package edu.pennstate.greatvalley.sweng.storm.topology;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import backtype.storm.Config;
 import backtype.storm.LocalCluster;
@@ -13,9 +13,11 @@ import edu.pennstate.greatvalley.sweng.storm.spouts.RTSASpout;
 import edu.pennstate.greatvalley.sweng.storm.utils.AppConstant;
 
 public final class RTSATopology {
-	private static final Logger LOGGER = LoggerFactory
-			.getLogger(RTSATopology.class);
-
+	//Creation of logger
+	static Logger logger = Logger.getLogger("myLogger");
+	
+	private RTSATopology(){ };
+	
 	public static final void main(final String[] args) throws Exception {
 		try {
 			final Config config = new Config();
@@ -25,10 +27,6 @@ public final class RTSATopology {
 			TopologyBuilder topologyBuilder = new TopologyBuilder();
 
 			String[] twitterHandles = { "@Modi", "@NarendraModi", "@PMOIndia" };
-
-			// String[] twitterHandles = {"penn state", "@penn_state",
-			// "@PennStateFball", "@GoPSUSports",
-			// "@PennStateMHKY","@pennstatenews","@PennStateMBB","@psufootball","@PennStateAlums","@PSUWorldCampus","@PennStateBase"};
 
 			topologyBuilder
 					.setSpout("rtsaSpout", new RTSASpout(twitterHandles));
@@ -51,9 +49,8 @@ public final class RTSATopology {
 						topologyBuilder.createTopology());
 
 			}
-		} catch (Exception exception) {
-
-			exception.printStackTrace();
+		} catch (Exception e) {
+			throw new RuntimeException(e);
 		}
 
 	}

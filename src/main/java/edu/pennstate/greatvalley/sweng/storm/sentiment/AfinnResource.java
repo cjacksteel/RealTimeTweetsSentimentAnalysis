@@ -8,8 +8,13 @@ import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class AfinnResource {
+
+	//Creation of logger
+	static Logger logger = Logger.getLogger("myLogger");
 
 	private static Map<String, Integer> AFINN_WORD_SENTIMENT_MAP;
 	private static Set<String> AFINN_WORDS;
@@ -40,8 +45,7 @@ public class AfinnResource {
 		try {
 			
 			InputStream inputStream =AfinnResource.class.getClassLoader().getResourceAsStream("AFINN/AFINN-111.txt");
-			
-			
+				
 			buffReader = new BufferedReader(new InputStreamReader(inputStream));
 					
 			String line = null;
@@ -54,15 +58,12 @@ public class AfinnResource {
 			}
 
 		} catch (FileNotFoundException e) {
-			e.printStackTrace();
+			  throw new RuntimeException(e);
 		} catch (NumberFormatException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			throw new RuntimeException("ERROR: Number format exception.");
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			  throw new RuntimeException(e);
 		}
-
 	}
 
 	
@@ -96,6 +97,6 @@ public class AfinnResource {
 
 		Map<String, Integer> map = getAfinnWordSentimentMap();
 
-		System.out.println(map);
+		logger.log(Level.INFO, map.toString());
 	}
 }

@@ -33,12 +33,9 @@ public class TweetCommentBolt extends BaseRichBolt {
 
 	private Set<String> affinWords;
 
-	private TopologyContext context;
-
 	public void prepare(Map map, TopologyContext context,
 			OutputCollector collector) {
 		this.outputCollector = collector;
-		this.context = context;
 		affinWords = AfinnResource.getAfinnWords();
 		// or any property file reading with regards to key
 	}
